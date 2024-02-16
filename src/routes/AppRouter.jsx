@@ -4,8 +4,8 @@ import RegisterForm from '../layout/RegisterForm'
 import useAuth from '../hooks/useAuth'
 import Header from '../layout/Header'
 import UserHome from '../layout/UserHome'
-import NewTodoForm from '../layout/NewTodoForm'
-import New from '../layout/new'
+import Reservation from '../layout/reservation'
+import Payment from '../layout/payment'
 
 const guestRouter = createBrowserRouter([
   {
@@ -29,8 +29,8 @@ const userRouter = createBrowserRouter([
     </>,
     children : [
       { index: true, element: <UserHome /> },
-      { path: '/new', element: <NewTodoForm />},
-      { path: '/nom', element: <New/>},
+      { path: '/nom', element: <Reservation/>},
+      { path: '/pay', element: <Payment/>},
     ]
   }
 ])
