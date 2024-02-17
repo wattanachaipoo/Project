@@ -9,7 +9,7 @@ function ReservationTable() {
   useEffect(() => {
     async function fetchReservations() {
       try {
-        const response = await axios.get("http://localhost:8889/reservation/show");
+        const response = await axios.get("http://localhost:8889/reservation/history");
         const reservationsArray = Array.isArray(response.data.reservations)
           ? response.data.reservations
           : []; // หากไม่ใช่อาร์เรย์จะกำหนดเป็น []
@@ -42,7 +42,7 @@ function ReservationTable() {
     <div className="bg-[url('/img/reser.jpg')] h-screen bg-cover flex justify-center items-center">
     <div className="bg-cover min-h-screen flex justify-center items-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="bg-white shadow-md w-6/6 rounded-lg overflow-hidden">
-        <div className="text-3xl mb-5 text-center font-bold text-black">ใบเสร็จในการจอง</div>
+        <div className="text-3xl mb-5 text-center font-bold text-black">ประวัติการจองของคุณ</div>
         <table className="w-full border-collapse border border-gray-200">
           <thead>
             <tr className="bg-gray-100">

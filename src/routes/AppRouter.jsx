@@ -6,6 +6,9 @@ import Header from '../layout/Header'
 import UserHome from '../layout/UserHome'
 import Reservation from '../layout/reservation'
 import Payment from '../layout/payment'
+import Edit from '../layout/editroom'
+import EditRoom from '../layout/edit'
+import History from '../layout/้history'
 
 const guestRouter = createBrowserRouter([
   {
@@ -31,6 +34,10 @@ const userRouter = createBrowserRouter([
       { index: true, element: <UserHome /> },
       { path: '/nom', element: <Reservation/>},
       { path: '/pay', element: <Payment/>},
+      { path: '/edit', element: <Edit/>},
+      { path: '/editroom', element: <EditRoom/>},
+      { path: '/his', element: <History/>},
+
     ]
   }
 ])

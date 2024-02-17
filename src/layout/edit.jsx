@@ -1,23 +1,31 @@
-import axios from "axios";
-import { useState } from "react";
+import React, { useState } from 'react';
+import axios from 'axios';
 
-export default function New() {
-  const [input, setInput] = useState({
+const UpdateReservationForm = () => {
+  const [formData, setFormData] = useState({
     number_of_guests: '',
     start_date: '',
     end_date: '',
+    number: '',
     room_type: '',
-    price: '',
+    price: ''
   });
+  const [message, setMessage] = useState('');
+  const [roomImage, setRoomImage] = useState(''); // เพิ่ม state สำหรับรูปภาพห้อง
 
-  const [roomImage, setRoomImage] = useState('');
-
-  const hdlChange = e => {
-    setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === 'start_date' || name === 'end_date') {
+      // Convert date to yyyy-MM-dd format
+      const isoDate = new Date(value).toISOString().split('T')[0];
+      setFormData((prevData) => ({ ...prevData, [name]: isoDate }));
+    } else {
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    }
   };
 
   const hdlRoomSelect = e => {
-    setInput(prevState => ({ ...prevState, [e.target.name]: e.target.value }));
+    setFormData(prevState => ({ ...prevState, [e.target.name]: e.target.value })); // อัพเดทค่าใน formData
     // เปลี่ยนรูปภาพตามที่เลือก
     switch (e.target.value) {
       case 'standard':
@@ -35,35 +43,29 @@ export default function New() {
     }
   };
 
-  const hdlSubmit = async e => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      e.preventDefault();
-      const output = {
-        ...input,
-        start_date: new Date(input.start_date),
-        end_date: new Date(input.end_date)
-      };
-      const token = localStorage.getItem('token');
-      const rs = await axios.post('http://localhost:8889/reservation', output, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      alert('จองเสร็จสิ้น');
-    } catch (err) {
-      alert(err.message);
+      const response = await axios.put('http://localhost:8889/reservation/mo', formData);
+      const data = response.data;
+      setMessage(data.msg);
+    } catch (error) {
+      setMessage('มีข้อผิดพลาดเกิดขึ้น');
+      console.error('Error updating reservation:', error);
     }
   };
 
   return (
-    <div className="bg-[url('/img/reser.jpg')] h-screen bg-cover">
+    <div className="bg-[url('https://png.pngtree.com/background/20230617/original/pngtree-stylish-hotel-suite-with-a-contemporary-3d-rendered-luxury-bedroom-and-picture-image_3704763.jpg')] h-screen bg-cover">
       <div className="bg-cover min-h-screen flex justify-center items-center">
         <form
           className="bg-white shadow-md px-8 pt-6 pb-8 w-3/6 rounded-lg"
-          onSubmit={hdlSubmit}
+          onSubmit={handleSubmit}
           method="post"
         >
-          <div className="text-3xl mb-5 text-center font-bold text-black">ข้อมูลการจอง</div>
+          <div className="text-3xl mb-5 text-center font-bold text-black">แก้ไขข้อมูลการจอง</div>
           <div className="mb-4 form-control w-full max-w-xs mx-auto">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start_date ">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start_date">
               จองตั้งแต่วันที่
             </label>
             <input
@@ -71,8 +73,8 @@ export default function New() {
               id="start_date"
               type="date"
               name="start_date"
-              value={input.start_date}
-              onChange={hdlChange}
+              value={formData.start_date}
+              onChange={handleChange}
             />
           </div>
 
@@ -85,8 +87,8 @@ export default function New() {
               id="end_date"
               type="date"
               name="end_date"
-              value={input.end_date}
-              onChange={hdlChange}
+              value={formData.end_date}
+              onChange={handleChange}
             />
           </div>
 
@@ -99,22 +101,22 @@ export default function New() {
               id="number_of_guests"
               type="text"
               name="number_of_guests"
-              value={input.number_of_guests}
-              onChange={hdlChange}
+              value={formData.number_of_guests}
+              onChange={handleChange}
             />
           </div>
           <div className="mb-4 form-control w-full max-w-xs mx-auto">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="number">
-              เลือกเลขห้อง
+              เลือกเลขห้องใหม่
             </label>
             <select
               className="input input-bordered w-full max-w-xs bg-white text-black"
               id="number"
               name="number"
-              value={input.number}
-              onChange={hdlChange}
+              value={formData.number}
+              onChange={handleChange}
             >
-             <option value="">โปรดเลือก</option>
+              <option value="">โปรดเลือก</option>
               <option value="230">230</option>
               <option value="240">240</option>
               <option value="250">250</option>
@@ -130,7 +132,7 @@ export default function New() {
               className="input input-bordered w-full max-w-xs bg-white text-black"
               id="room_type"
               name="room_type"
-              value={input.room_type}
+              value={formData.room_type}
               onChange={hdlRoomSelect}
             >
               <option value="">โปรดเลือก</option>
@@ -139,7 +141,7 @@ export default function New() {
               <option value="suite">สวีท</option>
             </select>
           </div>
-            {roomImage && (
+          {roomImage && (
               <div className="flex justify-center">
                 <img src={roomImage} alt="Room" className="max-w-xs mx-auto" />
               </div>
@@ -152,8 +154,8 @@ export default function New() {
               className="input input-bordered w-full max-w-xs bg-white text-black"
               id="price"
               name="price"
-              value={input.price}
-              onChange={hdlChange}
+              value={formData.price}
+              onChange={handleChange}
             >
               <option value="">โปรดเลือก</option>
               <option value="1000">1,000 บาท</option>
@@ -167,10 +169,13 @@ export default function New() {
               type="submit"
             > บันทึก
             </button>
-            <a href="/" className=" bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">ย้อนกลับ</a>
+            <a href="/edit" className=" bg-red-700 hover:bg-red-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4">ย้อนกลับ</a>
           </div>
+          {message && <p className='text-green-500'>{message}</p>}
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default UpdateReservationForm;
