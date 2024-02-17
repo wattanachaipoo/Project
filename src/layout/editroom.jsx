@@ -44,7 +44,7 @@ function ReservationTable() {
         <div className="bg-[url('https://www.phuketmoderncurtain.com/wp-content/uploads/2017/08/6.1.jpg')] h-screen bg-cover flex justify-center items-center">
             <div className="bg-cover min-h-screen flex justify-center items-center mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div className="p-5 w-10/10 mx-auto rounded-lg bg-white">
-                    <div className="text-3xl mb-5 text-center font-bold text-black">ใบเสร็จในการจอง</div>
+                    <div className="text-3xl mb-5 text-center font-bold text-black">แก้ไขการจอง</div>
                     <table className="w-full border-collapse border border-gray-200">
                         <thead>
                             <tr className="bg-gray-100">
